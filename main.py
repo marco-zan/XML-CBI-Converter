@@ -10,7 +10,7 @@ class CBIConverter(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        self.title("Sample Interface")
+        self.title("Convertitore estratti conto")
         self.geometry("800x600")
         
         # Left frame
@@ -18,11 +18,11 @@ class CBIConverter(tk.Tk):
         left_frame.pack(side=tk.LEFT, fill=tk.Y)
         
         # Title in left frame
-        title_label = tk.Label(left_frame, text="Sample Title", font=("Arial", 16))
+        title_label = tk.Label(left_frame, text="Convertitore", font=("Arial", 16))
         title_label.pack(pady=10)
         
         # Import button
-        import_button = tk.Button(left_frame, text="Import XML File", command=self.import_file)
+        import_button = tk.Button(left_frame, text="Importa file XML", command=self.import_file)
         import_button.pack(pady=10)
         
         # Table with labels and values
@@ -76,6 +76,7 @@ class CBIConverter(tk.Tk):
 
     def import_file(self):
         file = filedialog.askopenfilename(filetypes=[("XML files", "*.xml")])
+        if file == "": return
 
         file_path = Path(file)
         if file_path.exists():

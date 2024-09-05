@@ -1,0 +1,52 @@
+on:
+  push:
+    branches:
+    - release
+  workflow_dispatch:
+
+jobs:
+  build_windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+  
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
+  
+      - name: Install pipenv
+        run: pip install pipenv
+      
+      - name: Pipenv dependencies
+        run: pipenv sync -d
+  
+      - name: Build using pyinstaller
+        run: pipenv run pyinstaller .\src\main.py --noconsole --name GeneratoreAlias
+      
+      - name: Zip Release
+        uses: TheDoctor0/zip-release@0.7.6
+        with:
+          filename: 'GeneratoreAlias-win.zip'
+          path: "./dist/GeneratoreAlias/"
+      
+      - name: Get last commit ID of branch
+        id: get_commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
+        run: |
+          $BRANCH_NAME = "${{ github.ref_name }}"
+          $COMMIT_ID = gh api repos/${{ github.repository }}/commits/$BRANCH_NAME --jq '.sha'
+          echo "Latest commit ID of $BRANCH_NAME`: $COMMIT_ID"
+          echo "commit_id=$COMMIT_ID" >> $env:GITHUB_OUTPUT
+
+      - name: Publish Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: pwsh
+        run: |
+          $COMMIT_ID = "${{ steps.get_commit.outputs.commit_id }}"
+          gh release create $COMMIT_ID 'GeneratoreAlias-win.zip' --target ${{ github.ref_name }}
