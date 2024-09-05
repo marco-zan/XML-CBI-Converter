@@ -49,4 +49,5 @@ jobs:
         shell: pwsh
         run: |
           $COMMIT_ID = "${{ steps.get_commit.outputs.commit_id }}"
-          gh release create $COMMIT_ID 'XmlToCbiConverter-win.zip' --target ${{ github.ref_name }}
+          $SHORT_COMMIT_ID = $COMMIT_ID.Substring(0, 10)
+          gh release create $SHORT_COMMIT_ID 'XmlToCbiConverter-win.zip' --target ${{ github.ref_name }}

@@ -2,6 +2,7 @@ from pathlib import Path
 import tkinter as tk
 from tkinter import ttk, filedialog
 import lxml
+import locale
 from classes.Entry import Entry
 from lib.writer import export_csv
 from lib.parser import parse_file
@@ -78,14 +79,16 @@ class CBIConverter(tk.Tk):
         file = filedialog.askopenfilename(filetypes=[("XML files", "*.xml")])
         if file == "": return
 
+        locale.setlocale(locale.LC_ALL, '')
+
         file_path = Path(file)
         if file_path.exists():
             sorted_entries, totale_entrate, totale_uscite, totale = parse_file(file_path)
 
-            self.values[0].config(text=str(len(sorted_entries)))
-            self.values[1].config(text=f"{totale_entrate:.2f} €")
-            self.values[2].config(text=f"{totale_uscite:.2f} €")
-            self.values[3].config(text=f"{totale:.2f} €")
+            self.values[0].config(text=locale.format_string("%d", len(sorted_entries), grouping=True))
+            self.values[1].config(text=f"{locale.currency(totale_entrate, grouping=True)} €")
+            self.values[2].config(text=f"{locale.currency(totale_uscite, grouping=True)} €")
+            self.values[3].config(text=f"{locale.currency(totale, grouping=True)} €")
 
             self.tree.delete(*self.tree.get_children())
             for el in sorted_entries:
