@@ -2,3 +2,7 @@
 *.xml
 .*
 !.git*
+
+*.spec
+build/
+dist/

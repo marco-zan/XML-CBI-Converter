@@ -23,13 +23,13 @@ jobs:
         run: pipenv sync -d
   
       - name: Build using pyinstaller
-        run: pipenv run pyinstaller .\src\main.py --noconsole --name GeneratoreAlias
+        run: pipenv run pyinstaller .\main.py --noconsole --name XmlToCbiConverter
       
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.7.6
         with:
-          filename: 'GeneratoreAlias-win.zip'
-          path: "./dist/GeneratoreAlias/"
+          filename: 'XmlToCbiConverter-win.zip'
+          path: "./dist/XmlToCbiConverter/"
       
       - name: Get last commit ID of branch
         id: get_commit
@@ -49,4 +49,4 @@ jobs:
         shell: pwsh
         run: |
           $COMMIT_ID = "${{ steps.get_commit.outputs.commit_id }}"
-          gh release create $COMMIT_ID 'GeneratoreAlias-win.zip' --target ${{ github.ref_name }}
+          gh release create $COMMIT_ID 'XmlToCbiConverter-win.zip' --target ${{ github.ref_name }}

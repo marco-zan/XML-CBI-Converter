@@ -7,6 +7,7 @@ name = "pypi"
 icecream = "*"
 lxml = "*"
 lxml-stubs = "*"
+pyinstaller = "*"
 
 [dev-packages]
 

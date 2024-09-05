@@ -1,7 +1,7 @@
 from pathlib import Path
 import tkinter as tk
 from tkinter import ttk, filedialog
-
+import lxml
 from classes.Entry import Entry
 from lib.writer import export_csv
 from lib.parser import parse_file
